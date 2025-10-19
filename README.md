@@ -54,8 +54,11 @@ REST API для интернет-магазина techwear бренда VNE.
 
    http://localhost:8000
 
-5. **Для запуска тестов:**
+5. **Документация API доступна по адресу:** 
+   
+   http://localhost:8000/docs
+
+6. **Для запуска тестов:**
     ```bash
     pytest tests/ -v
     ```
-    
