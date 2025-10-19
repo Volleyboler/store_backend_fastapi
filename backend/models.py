@@ -10,7 +10,6 @@ class Product(Base):
     description = Column(Text)
     price = Column(Float, nullable=False)
     category = Column(String(100), nullable=False, index=True)
-    sizes = Column(ARRAY(String(20)), nullable=False)  # ['S', 'M', 'L', 'XL']
+    sizes = Column(ARRAY(String(20)), nullable=False)
     in_stock = Column(Boolean, default=True)
     image_url = Column(String(500))
-    

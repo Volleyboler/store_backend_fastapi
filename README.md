@@ -24,7 +24,6 @@ REST API для интернет-магазина techwear бренда VNE.
 - `POST /products` - Добавить новый товар
 - `PUT /products/{id}` - Обновить товар
 - `DELETE /products/{id}` - Удалить товар
-- `GET /health` - Проверка здоровья приложения
 
 ## Запуск приложения
 
@@ -33,3 +32,16 @@ REST API для интернет-магазина techwear бренда VNE.
 1. Установите зависимости:
 ```bash
 pip install -r requirements.txt
+```
+2. Запустите PostgreSQL и создайте базу данных vne_techwear
+
+3. Запустите приложение
+```bash
+uvicorn app.main:app --reload
+```
+### Запуск с Docker
+
+Запуск всех сервисов
+```bash
+docker-compose up --build
+```

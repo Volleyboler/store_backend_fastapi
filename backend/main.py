@@ -6,12 +6,12 @@ import schemas
 import crud
 from database import engine, get_db
 
-# Создание таблиц
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="VNE Techwear API",
-    description="REST API для интернет-магазина techwear бренда VNE",
+    description="REST API для интернет-магазина VNE",
     version="1.0.0"
 )
 
@@ -27,6 +27,9 @@ def read_products(
     search: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
+    """
+    Получение всех товаров
+    """
     products = crud.get_products(
         db, 
         skip=skip, 
@@ -43,6 +46,9 @@ def read_products(
 
 @app.get("/products/{product_id}", response_model=schemas.Product)
 def read_product(product_id: int, db: Session = Depends(get_db)):
+    """
+    Получение товара по id
+    """
     db_product = crud.get_product(db, product_id=product_id)
     if db_product is None:
         raise HTTPException(status_code=404, detail="Товар не найден")
@@ -50,10 +56,16 @@ def read_product(product_id: int, db: Session = Depends(get_db)):
 
 @app.post("/products", response_model=schemas.Product)
 def create_product(product: schemas.ProductCreate, db: Session = Depends(get_db)):
+    """
+    Добавление товара
+    """
     return crud.create_product(db=db, product=product)
 
 @app.delete("/products/{product_id}")
 def delete_product(product_id: int, db: Session = Depends(get_db)):
+    """
+    Удаление товара
+    """
     success = crud.delete_product(db, product_id=product_id)
     if not success:
         raise HTTPException(status_code=404, detail="Товар не найден")
@@ -65,12 +77,10 @@ def update_product(
     product_update: schemas.ProductUpdate, 
     db: Session = Depends(get_db)
 ):
+    """
+    Обновление товара
+    """
     updated_product = crud.update_product(db, product_id, product_update)
     if updated_product is None:
         raise HTTPException(status_code=404, detail="Товар не найден")
     return updated_product
-
-# Health check endpoint
-@app.get("/health")
-def health_check():
-    return {"status": "healthy"}

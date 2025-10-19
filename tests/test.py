@@ -6,13 +6,13 @@ from app.main import app
 from app.database import get_db
 from app.models import Base
 
-# Тестовая база данных
+
 SQLALCHEMY_DATABASE_URL = "postgresql://test:test@localhost/test_vne_techwear"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Создание таблиц для тестов
+
 Base.metadata.create_all(bind=engine)
 
 def override_get_db():
@@ -27,6 +27,9 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 def test_create_product():
+    """
+    Проверка создания товара
+    """
     product_data = {
         "name": "Test Tech Jacket",
         "description": "Waterproof tech jacket with multiple pockets",
@@ -87,11 +90,16 @@ def test_get_product():
     assert data["name"] == product_data["name"]
 
 def test_get_nonexistent_product():
+    """
+    Проверка несуществующего товара
+    """
     response = client.get("/products/9999")
     assert response.status_code == 404
 
 def test_delete_product():
-    # Сначала создаем товар
+    """
+    Проверка удаления товара
+    """
     product_data = {
         "name": "Product to Delete",
         "price": 99.99,
@@ -102,16 +110,16 @@ def test_delete_product():
     create_response = client.post("/products", json=product_data)
     product_id = create_response.json()["id"]
     
-    # Затем удаляем его
     response = client.delete(f"/products/{product_id}")
     assert response.status_code == 200
     
-    # Проверяем, что товар удален
     get_response = client.get(f"/products/{product_id}")
     assert get_response.status_code == 404
 
 def test_search_products():
-    # Создаем тестовые товары для поиска
+    """
+    Тестовый поиск товаров
+    """
     products = [
         {
             "name": "Urban Tech Pants",
@@ -130,17 +138,14 @@ def test_search_products():
     for product in products:
         client.post("/products", json=product)
     
-    # Поиск по категории
     response = client.get("/products?category=Hoodies")
     assert response.status_code == 200
     data = response.json()
     assert len(data["products"]) > 0
     assert all(p["category"] == "Hoodies" for p in data["products"])
     
-    # Поиск по названию
     response = client.get("/products?search=Urban")
     assert response.status_code == 200
     data = response.json()
     assert len(data["products"]) > 0
     assert any("Urban" in p["name"] for p in data["products"])
-    
