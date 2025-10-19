@@ -10,7 +10,7 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/app
+      - .:/backend
 
   db:
     image: postgres:15
@@ -19,7 +19,7 @@ services:
       - POSTGRES_USER=vne_user
       - POSTGRES_PASSWORD=vne_password
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
