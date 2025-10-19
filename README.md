@@ -27,21 +27,39 @@ REST API для интернет-магазина techwear бренда VNE.
 
 ## Запуск приложения
 
-### Локальный запуск (без Docker)
+1. **Клонируйте репозиторий и перейдите в папку проекта**
 
-1. Установите зависимости:
-```bash
-pip install -r requirements.txt
-```
-2. Запустите PostgreSQL и создайте базу данных vne_techwear
+2. **Запустите приложение с Docker (рекомендуется):**
+    ```bash
+    docker-compose up --build
+    ```
 
-3. Запустите приложение
-```bash
-uvicorn app.main:app --reload
-```
-### Запуск с Docker
+3. **Или запустите локально:**
 
-Запуск всех сервисов
-```bash
-docker-compose up --build
-```
+- Установите PostgreSQL
+
+- Создайте базу данных **vne_techwear**
+
+- Установите зависимости: 
+  ```bash 
+  pip install -r requirements.txt
+  ```
+
+- Запустите: 
+  ```bash 
+  uvicorn app.main:app --reload
+  ```
+
+1. **Откройте в браузере:**
+
+   http://localhost:8000
+
+2. **Документация API доступна по адресу:** 
+   
+   http://localhost:8000/docs
+
+3. **Для запуска тестов:**
+    ```bash
+    pytest tests/ -v
+    ```
+    
